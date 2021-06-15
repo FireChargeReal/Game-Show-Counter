@@ -30,7 +30,7 @@ export default class HelloWorld {
 	 */
 	private started() {
 
-		this.shiftConf = .50;
+		this.shiftConf = .85;
 		this.shift = .5;
 		this.boards = 4;
 

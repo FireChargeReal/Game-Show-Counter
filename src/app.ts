@@ -30,7 +30,7 @@ export default class HelloWorld {
 	 */
 	private started() {
 
-		this.shiftConf = .20;
+		this.shiftConf = .50;
 		this.shift = .5;
 		this.boards = 4;
 
@@ -104,7 +104,7 @@ export default class HelloWorld {
 					parentId: this.menu.id,
 					transform: {
 						local: {
-							position: { x: 0, y: this.shift, z: 0 },
+							position: { x: this.shift, y: 0, z: 0 },
 							scale: { x: 0.4, y: 0.4, z: 0.4 }
 						}
 					}

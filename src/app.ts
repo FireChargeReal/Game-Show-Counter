@@ -30,8 +30,8 @@ export default class HelloWorld {
 	 */
 	private started() {
 
-		this.shiftConf = .50;
-		this.shift = .5;
+		this.shiftConf = -.90;
+		this.shift = -.5;
 		this.boards = 4;
 
 		// set up somewhere to store loaded assets (meshes, textures, animations, gltfs, etc.)

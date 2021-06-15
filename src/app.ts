@@ -22,7 +22,7 @@ export default class HelloWorld {
 	private shift: number;
 	private shiftT: number;
 	private boards: number;
-	private Score: Array<number>;
+	private Score: number[];
 
 
 	constructor(private context: MRE.Context) {

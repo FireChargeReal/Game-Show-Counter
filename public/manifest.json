@@ -1,0 +1,6 @@
+{
+	"name": "Molly's buzzer",
+	"author": "Iskren A.K.A FireCharge",
+	"repositoryUrl": "https://github.com/FireChargeReal/Mollys-Buzzer",
+	"optionalPermissions": ["user-interaction"]
+}

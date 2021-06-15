@@ -29,14 +29,14 @@ export default class HelloWorld {
 	 * Once the context is "started", initialize the app.
 	 */
 	private started() {
-		
-		this.shiftConf = .50;
-		this.shift = 0;
+
+		this.shiftConf = .20;
+		this.shift = .5;
 		this.boards = 4;
-		
+
 		// set up somewhere to store loaded assets (meshes, textures, animations, gltfs, etc.)
 		this.assets = new MRE.AssetContainer(this.context);
-		
+
 		this.menu = MRE.Actor.Create(this.context, {});
 
 		this.create_score();
@@ -69,7 +69,7 @@ export default class HelloWorld {
 
 		// // When clicked, do a 360 sideways.
 		// buttonBehavior.onClick(_ => {
-			
+
 		// 	this.startSound();
 		// 	MRE.Animation.AnimateTo(this.context, this.button, {
 		// 		destination: { transform: { local: { scale: { x: 2, y: 5, z: 2 } } } },
@@ -89,27 +89,29 @@ export default class HelloWorld {
 	// 	options.time = 0;
 	// 	this.button.startSound(this.buzzerSound.id, options);
 	// }
-	private async create_score(){
+	private async create_score() {
 		// Load a glTF model before we use it
 		const cubeData = await this.assets.loadGltf('TV.glb', "box");
-
-		// spawn a copy of the glTF model
-		this.tv = MRE.Actor.CreateFromPrefab(this.context, {
-			// using the data we loaded earlier
-			firstPrefabFrom: cubeData,
-			// Also apply the following generic actor properties.
-			actor: {
-				name: 'Altspace button',
-				// Parent the glTF model to the text actor, so the transform is relative to the text
-				parentId: this.menu.id,
-				transform: {
-					local: {
-						position: { x: 0, y: -1, z: 0 },
-						scale: { x: 0.4, y: 0.4, z: 0.4 }
+		for (let i = 0; i < this.boards; i++) {
+			// spawn a copy of the glTF model
+			this.tv = MRE.Actor.CreateFromPrefab(this.context, {
+				// using the data we loaded earlier
+				firstPrefabFrom: cubeData,
+				// Also apply the following generic actor properties.
+				actor: {
+					name: 'Altspace button',
+					// Parent the glTF model to the text actor, so the transform is relative to the text
+					parentId: this.menu.id,
+					transform: {
+						local: {
+							position: { x: 0, y: this.shift, z: 0 },
+							scale: { x: 0.4, y: 0.4, z: 0.4 }
+						}
 					}
 				}
-			}
-		});
+			});
+			this.shift += this.shiftConf;
+		}
 	}
 
 }

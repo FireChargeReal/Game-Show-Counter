@@ -12,6 +12,7 @@ import * as MRE from '@microsoft/mixed-reality-extension-sdk';
 export default class HelloWorld {
 	private menu: MRE.Actor = null;
 	private tv: MRE.Actor = null;
+	private scoreT: MRE.Actor = null;
 	private up: MRE.Actor = null;
 	private down: MRE.Actor = null;
 	private reset: MRE.Actor = null;
@@ -19,7 +20,10 @@ export default class HelloWorld {
 	private buzzerSound: MRE.Sound = undefined;
 	private shiftConf: number;
 	private shift: number;
+	private shiftT: number;
 	private boards: number;
+	private Score: Array<number>;
+
 
 	constructor(private context: MRE.Context) {
 		this.context.onStarted(() => this.started());
@@ -29,10 +33,16 @@ export default class HelloWorld {
 	 * Once the context is "started", initialize the app.
 	 */
 	private started() {
-
+		// config for board positioning and amount of boards
 		this.shiftConf = -.90;
 		this.shift = -.5;
+		this.shiftT = -.53;
 		this.boards = 4;
+
+		// initialize score
+		for (let x = 0; x < this.boards; x++) {
+			this.Score[x] = 0;
+		}
 
 		// set up somewhere to store loaded assets (meshes, textures, animations, gltfs, etc.)
 		this.assets = new MRE.AssetContainer(this.context);
@@ -40,6 +50,7 @@ export default class HelloWorld {
 		this.menu = MRE.Actor.Create(this.context, {});
 
 		this.create_score();
+		this.show_score();
 
 		this.buzzerSound = this.assets.createSound(
 			'alarmSound',
@@ -102,7 +113,7 @@ export default class HelloWorld {
 				firstPrefabFrom: tvmodel,
 				// Also apply the following generic actor properties.
 				actor: {
-					name: 'Altspace button',
+					name: 'Tv Model',
 					// Parent the glTF model to the text actor, so the transform is relative to the text
 					parentId: this.menu.id,
 					transform: {
@@ -119,7 +130,7 @@ export default class HelloWorld {
 				firstPrefabFrom: upmodel,
 				// Also apply the following generic actor properties.
 				actor: {
-					name: 'Altspace button',
+					name: 'up button',
 					// Parent the glTF model to the text actor, so the transform is relative to the text
 					parentId: this.menu.id,
 					transform: {
@@ -129,6 +140,11 @@ export default class HelloWorld {
 						}
 					}
 				}
+			});
+			const upBehavior = this.up.setBehavior(MRE.ButtonBehavior);
+			upBehavior.onClick(_ => {
+				this.Score[i] += 1;
+				this.show_score();
 			});
 
 			this.down = MRE.Actor.CreateFromPrefab(this.context, {
@@ -136,7 +152,7 @@ export default class HelloWorld {
 				firstPrefabFrom: downmodel,
 				// Also apply the following generic actor properties.
 				actor: {
-					name: 'Altspace button',
+					name: 'down button',
 					// Parent the glTF model to the text actor, so the transform is relative to the text
 					parentId: this.menu.id,
 					transform: {
@@ -146,6 +162,16 @@ export default class HelloWorld {
 						}
 					}
 				}
+			});
+			const downBehavior = this.down.setBehavior(MRE.ButtonBehavior);
+			downBehavior.onClick(_ => {
+				if (this.Score[i] > 0) {
+					this.Score[i] -= 1;
+				}
+				else {
+					this.Score[i] = 0;
+				}
+				this.show_score();
 			});
 
 			this.reset = MRE.Actor.CreateFromPrefab(this.context, {
@@ -153,7 +179,7 @@ export default class HelloWorld {
 				firstPrefabFrom: resetmodel,
 				// Also apply the following generic actor properties.
 				actor: {
-					name: 'Altspace button',
+					name: 'reset button',
 					// Parent the glTF model to the text actor, so the transform is relative to the text
 					parentId: this.menu.id,
 					transform: {
@@ -164,7 +190,33 @@ export default class HelloWorld {
 					}
 				}
 			});
+			const resetBehavior = this.reset.setBehavior(MRE.ButtonBehavior);
+			resetBehavior.onClick(_ => {
+				this.Score[i] = 0;
+				this.show_score();
+			});
+
 			this.shift += this.shiftConf;
+		}
+	}
+	private show_score() {
+		this.scoreT.destroy();
+		for (let i = 0; i < this.boards; i++) {
+			this.scoreT = MRE.Actor.Create(this.context, {
+				actor: {
+					name: 'score',
+					transform: {
+						app: { position: { x: this.shiftT, y: 0.5, z: .4 } }
+					},
+					text: {
+						contents: String(this.Score[i]),
+						anchor: MRE.TextAnchorLocation.MiddleCenter,
+						color: { r: 30 / 255, g: 206 / 255, b: 213 / 255 },
+						height: 0.3
+					}
+				}
+			});
+			this.shiftT += this.shiftConf;
 		}
 	}
 

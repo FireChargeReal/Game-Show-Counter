@@ -34,7 +34,7 @@ export default class HelloWorld {
 
 		this.menu = MRE.Actor.Create(this.context, {});
 
-		
+		this.create_score();
 
 		this.buzzerSound = this.assets.createSound(
 			'alarmSound',

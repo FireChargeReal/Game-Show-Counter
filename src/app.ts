@@ -30,8 +30,8 @@ export default class HelloWorld {
 	 */
 	private started() {
 
-		this.shiftConf = -.90;
-		this.shift = -.5;
+		this.shiftConf = .50;
+		this.shift = .5;
 		this.boards = 4;
 
 		// set up somewhere to store loaded assets (meshes, textures, animations, gltfs, etc.)
@@ -91,12 +91,66 @@ export default class HelloWorld {
 	// }
 	private async create_score() {
 		// Load a glTF model before we use it
-		const cubeData = await this.assets.loadGltf('TV.glb', "box");
+		const tvmodel = await this.assets.loadGltf('TV.glb', "box");
+		const upmodel = await this.assets.loadGltf('UpButton.glb', "box");
+		const downmodel = await this.assets.loadGltf('DownButton.glb', "box");
+		const resetmodel = await this.assets.loadGltf('RedButton.glb', "box");
 		for (let i = 0; i < this.boards; i++) {
 			// spawn a copy of the glTF model
 			this.tv = MRE.Actor.CreateFromPrefab(this.context, {
 				// using the data we loaded earlier
-				firstPrefabFrom: cubeData,
+				firstPrefabFrom: tvmodel,
+				// Also apply the following generic actor properties.
+				actor: {
+					name: 'Altspace button',
+					// Parent the glTF model to the text actor, so the transform is relative to the text
+					parentId: this.menu.id,
+					transform: {
+						local: {
+							position: { x: this.shift, y: 0, z: 0 },
+							scale: { x: 0.4, y: 0.4, z: 0.4 }
+						}
+					}
+				}
+			});
+
+			this.up = MRE.Actor.CreateFromPrefab(this.context, {
+				// using the data we loaded earlier
+				firstPrefabFrom: upmodel,
+				// Also apply the following generic actor properties.
+				actor: {
+					name: 'Altspace button',
+					// Parent the glTF model to the text actor, so the transform is relative to the text
+					parentId: this.menu.id,
+					transform: {
+						local: {
+							position: { x: this.shift, y: 0, z: 0 },
+							scale: { x: 0.4, y: 0.4, z: 0.4 }
+						}
+					}
+				}
+			});
+
+			this.down = MRE.Actor.CreateFromPrefab(this.context, {
+				// using the data we loaded earlier
+				firstPrefabFrom: this.down,
+				// Also apply the following generic actor properties.
+				actor: {
+					name: 'Altspace button',
+					// Parent the glTF model to the text actor, so the transform is relative to the text
+					parentId: this.menu.id,
+					transform: {
+						local: {
+							position: { x: this.shift, y: 0, z: 0 },
+							scale: { x: 0.4, y: 0.4, z: 0.4 }
+						}
+					}
+				}
+			});
+
+			this.reset = MRE.Actor.CreateFromPrefab(this.context, {
+				// using the data we loaded earlier
+				firstPrefabFrom: resetmodel,
 				// Also apply the following generic actor properties.
 				actor: {
 					name: 'Altspace button',

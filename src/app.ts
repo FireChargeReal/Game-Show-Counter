@@ -17,9 +17,9 @@ export default class HelloWorld {
 	private reset: MRE.Actor = null;
 	private assets: MRE.AssetContainer;
 	private buzzerSound: MRE.Sound = undefined;
-	private shiftConf: number = .50;
-	private shift: number = 0;
-	private boards: number = 4;
+	private shiftConf: number;
+	private shift: number;
+	private boards: number;
 
 	constructor(private context: MRE.Context) {
 		this.context.onStarted(() => this.started());
@@ -28,10 +28,15 @@ export default class HelloWorld {
 	/**
 	 * Once the context is "started", initialize the app.
 	 */
-	private async started() {
+	private started() {
+		
+		this.shiftConf = .50;
+		this.shift = 0;
+		this.boards = 4;
+		
 		// set up somewhere to store loaded assets (meshes, textures, animations, gltfs, etc.)
 		this.assets = new MRE.AssetContainer(this.context);
-
+		
 		this.menu = MRE.Actor.Create(this.context, {});
 
 		this.create_score();

@@ -133,7 +133,7 @@ export default class HelloWorld {
 
 			this.down = MRE.Actor.CreateFromPrefab(this.context, {
 				// using the data we loaded earlier
-				firstPrefabFrom: this.down,
+				firstPrefabFrom: downmodel,
 				// Also apply the following generic actor properties.
 				actor: {
 					name: 'Altspace button',

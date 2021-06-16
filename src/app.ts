@@ -171,8 +171,8 @@ export default class HelloWorld {
 					text: {
 						contents: String(this.Score[i]),
 						anchor: MRE.TextAnchorLocation.MiddleCenter,
-						color: { r: 30 / 255, g: 206 / 255, b: 213 / 255 },
-						height: 0.1
+						color: { r: 255 / 255, g: 255 / 255, b: 255 / 255 },
+						height: 0.3
 					}
 				}
 			}));

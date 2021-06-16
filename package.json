@@ -1,6 +1,6 @@
 {
-  "name": "buzzer",
-  "version": "0.0.1",
+  "name": "game show counter",
+  "version": "1.0.0",
   "private": true,
   "description": "",
   "main": "built/server.js",

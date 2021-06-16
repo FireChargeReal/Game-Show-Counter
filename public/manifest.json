@@ -1,5 +1,5 @@
 {
-	"name": "Molly's buzzer",
+	"name": "Game Show Counter",
 	"author": "Iskren A.K.A FireCharge",
 	"repositoryUrl": "https://github.com/FireChargeReal/Mollys-Buzzer",
 	"optionalPermissions": ["user-interaction"]

@@ -33,7 +33,7 @@ export default class HelloWorld {
 	 */
 	private started() {
 		// config for board positioning and amount of boards
-		this.shiftConf = -1.1;
+		this.shiftConf = -1.2;
 		this.shift = -.5;
 		this.shiftT = -.5;
 		this.boards = 4;

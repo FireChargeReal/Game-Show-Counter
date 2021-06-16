@@ -182,10 +182,7 @@ export default class HelloWorld {
 	}
 	// (this.scoreT[i].destroy());
 	// (delete this.scoreT[i]);
-	private destroy_score() {
-		console.log(this.scoreT.length);
-		console.log(this.scoreT)
-		
+	private destroy_score() {	
 		if (this.scoreT.length >= 1) {
 			for (let i = 0; i < this.boards; i++) {
 				this.scoreT[i].destroy();

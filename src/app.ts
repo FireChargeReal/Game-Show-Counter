@@ -12,12 +12,11 @@ import * as MRE from '@microsoft/mixed-reality-extension-sdk';
 export default class HelloWorld {
 	private menu: MRE.Actor = null;
 	private tv: MRE.Actor = null;
-	private scoreT: MRE.Actor = null;
+	private scoreT: MRE.Actor[];
 	private up: MRE.Actor = null;
 	private down: MRE.Actor = null;
 	private reset: MRE.Actor = null;
 	private assets: MRE.AssetContainer;
-	private buzzerSound: MRE.Sound = undefined;
 	private shiftConf: number;
 	private shift: number;
 	private shiftT: number;
@@ -36,70 +35,25 @@ export default class HelloWorld {
 		// config for board positioning and amount of boards
 		this.shiftConf = -.90;
 		this.shift = -.5;
-		this.shiftT = -.53;
+		this.shiftT = -.5;
 		this.boards = 4;
 
 		// initialize score
-		for (let x = 0; x < this.boards; x++) {
-			this.Score[x] = 0;
+		this.Score = new Array(this.boards);
+		for (let i = 0; i < this.boards; i++) {
+			this.Score[i] = 0;
 		}
 
 		// set up somewhere to store loaded assets (meshes, textures, animations, gltfs, etc.)
 		this.assets = new MRE.AssetContainer(this.context);
 
 		this.menu = MRE.Actor.Create(this.context, {});
-
+		this.scoreT = new Array(this.boards)
 		this.create_score();
 		this.show_score();
 
-		this.buzzerSound = this.assets.createSound(
-			'alarmSound',
-			{ uri: 'Gameboy Startup Sound.wav' });
-
-
-		// // Set up cursor interaction. We add the input behavior ButtonBehavior to the button.
-		// // Button behaviors have two pairs of events: hover start/stop, and click start/stop.
-		// const buttonBehavior = this.button.setBehavior(MRE.ButtonBehavior);
-
-		// // Trigger the grow/shrink animations on hover.
-		// buttonBehavior.onHover('enter', () => {
-		// 	// use the convenience function "AnimateTo" instead of creating the animation data in advance
-		// 	MRE.Animation.AnimateTo(this.context, this.button, {
-		// 		destination: { transform: { local: { scale: { x: 0.6, y: 0.6, z: 0.6 } } } },
-		// 		duration: 0.3,
-		// 		easing: MRE.AnimationEaseCurves.EaseOutSine
-		// 	});
-		// });
-		// buttonBehavior.onHover('exit', () => {
-		// 	MRE.Animation.AnimateTo(this.context, this.button, {
-		// 		destination: { transform: { local: { scale: { x: 0.4, y: 0.4, z: 0.4 } } } },
-		// 		duration: 0.3,
-		// 		easing: MRE.AnimationEaseCurves.EaseOutSine
-		// 	});
-		// });
-
-		// // When clicked, do a 360 sideways.
-		// buttonBehavior.onClick(_ => {
-
-		// 	this.startSound();
-		// 	MRE.Animation.AnimateTo(this.context, this.button, {
-		// 		destination: { transform: { local: { scale: { x: 2, y: 5, z: 2 } } } },
-		// 		duration: 0.7,
-		// 		easing: MRE.AnimationEaseCurves.EaseOutSine
-		// 	});
-		// 	MRE.Animation.AnimateTo(this.context, this.button, {
-		// 		destination: { transform: { local: { scale: { x: 0.4, y: 0.4, z: 0.4 } } } },
-		// 		duration: 0.3,
-		// 		easing: MRE.AnimationEaseCurves.EaseOutSine
-		// 	});
-		// });
-
 	}
-	// private startSound = () => {
-	// 	const options: MRE.SetAudioStateOptions = { volume: 0.4 };
-	// 	options.time = 0;
-	// 	this.button.startSound(this.buzzerSound.id, options);
-	// }
+
 	private async create_score() {
 		// Load a glTF model before we use it
 		const tvmodel = await this.assets.loadGltf('TV.glb', "box");
@@ -143,6 +97,7 @@ export default class HelloWorld {
 			});
 			const upBehavior = this.up.setBehavior(MRE.ButtonBehavior);
 			upBehavior.onClick(_ => {
+				this.destroy_score();
 				this.Score[i] += 1;
 				this.show_score();
 			});
@@ -165,6 +120,7 @@ export default class HelloWorld {
 			});
 			const downBehavior = this.down.setBehavior(MRE.ButtonBehavior);
 			downBehavior.onClick(_ => {
+				this.destroy_score();
 				if (this.Score[i] > 0) {
 					this.Score[i] -= 1;
 				}
@@ -192,6 +148,7 @@ export default class HelloWorld {
 			});
 			const resetBehavior = this.reset.setBehavior(MRE.ButtonBehavior);
 			resetBehavior.onClick(_ => {
+				this.destroy_score();
 				this.Score[i] = 0;
 				this.show_score();
 			});
@@ -200,24 +157,40 @@ export default class HelloWorld {
 		}
 	}
 	private show_score() {
-		this.scoreT.destroy();
+		let temp = this.shiftT;
 		for (let i = 0; i < this.boards; i++) {
-			this.scoreT = MRE.Actor.Create(this.context, {
+			this.scoreT[i] = (MRE.Actor.Create(this.context, {
 				actor: {
 					name: 'score',
 					transform: {
-						app: { position: { x: this.shiftT, y: 0.5, z: .4 } }
+						local: {
+							position: { x: this.shiftT, y: 0, z: .30 },
+							rotation: { x: 0, y: 180, z: 0 }
+						}
 					},
 					text: {
 						contents: String(this.Score[i]),
 						anchor: MRE.TextAnchorLocation.MiddleCenter,
 						color: { r: 30 / 255, g: 206 / 255, b: 213 / 255 },
-						height: 0.3
+						height: 0.1
 					}
 				}
-			});
+			}));
 			this.shiftT += this.shiftConf;
 		}
+		this.shiftT = temp;
 	}
-
+	// (this.scoreT[i].destroy());
+	// (delete this.scoreT[i]);
+	private destroy_score() {
+		console.log(this.scoreT.length);
+		console.log(this.scoreT)
+		
+		if (this.scoreT.length >= 1) {
+			for (let i = 0; i < this.boards; i++) {
+				this.scoreT[i].destroy();
+				delete this.scoreT[i];
+			}
+		}
+	}
 }

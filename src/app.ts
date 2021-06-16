@@ -33,7 +33,7 @@ export default class HelloWorld {
 	 */
 	private started() {
 		// config for board positioning and amount of boards
-		this.shiftConf = -1.2;
+		this.shiftConf = -1.1;
 		this.shift = -.5;
 		this.shiftT = -.5;
 		this.boards = 4;
@@ -164,7 +164,7 @@ export default class HelloWorld {
 					name: 'score',
 					transform: {
 						local: {
-							position: { x: this.shiftT, y: 0, z: .30 },
+							position: { x: this.shiftT, y: 0, z: .25 },
 							rotation: { x: 0, y: 180, z: 0 }
 						}
 					},

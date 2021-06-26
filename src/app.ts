@@ -32,27 +32,27 @@ export default class HelloWorld {
 	 */
 	private started() {
 		// config for board positioning and amount of boards
-		this.shift = -.5;
-		this.shiftT = -.5;
-
-		// initialize score
-		this.Score = new Array(this.config["boards"]);
-		for (let i = 0; i < this.config["boards"]; i++) {
-			this.Score[i] = 0;
-		}
+		this.shift = 0;
+		this.shiftT = 0;
+		console.log("test");
 
 		// set up somewhere to store loaded assets (meshes, textures, animations, gltfs, etc.)
 		this.assets = new MRE.AssetContainer(this.context);
-		const allowed = ["boards", "spread"]
+		const allowed = ["boards", "spread"];
 		this.config = { "boards": 4, "spread": -1.1 };
 		for (const key in this.params) {
+			console.log("test");
 
 			this.config[key] = Number(this.params[key]);
-			
-		}
 
+		}
+		// initialize score
+		this.Score = new Array(this.config["boards"]);
+		this.Score = [0, 0, 0, 0];
+		console.log(this.params); 2
 		this.menu = MRE.Actor.Create(this.context, {});
-		this.scoreT = new Array(this.config["boards"])
+		this.scoreT = new Array(this.config["boards"]);
+
 		this.create_score();
 		this.show_score();
 
@@ -64,8 +64,14 @@ export default class HelloWorld {
 		const upmodel = await this.assets.loadGltf('UpButton.glb', "box");
 		const downmodel = await this.assets.loadGltf('DownButton.glb', "box");
 		const resetmodel = await this.assets.loadGltf('RedButton.glb', "box");
+		console.log("test");
+		console.log(this.config["boards"]);
+
+
 		for (let i = 0; i < this.config["boards"]; i++) {
 			// spawn a copy of the glTF model
+			console.log("tv");
+
 			this.tv = MRE.Actor.CreateFromPrefab(this.context, {
 				// using the data we loaded earlier
 				firstPrefabFrom: tvmodel,
@@ -157,7 +163,7 @@ export default class HelloWorld {
 				this.show_score();
 			});
 
-			this.shift += this.config["boards"];
+			this.shift += -this.config["spread"];
 		}
 	}
 	private show_score() {
@@ -180,13 +186,13 @@ export default class HelloWorld {
 					}
 				}
 			}));
-			this.shiftT += this.config["boards"];
+			this.shiftT += -this.config["spread"];
 		}
 		this.shiftT = temp;
 	}
 	// (this.scoreT[i].destroy());
 	// (delete this.scoreT[i]);
-	private destroy_score() {	
+	private destroy_score() {
 		if (this.scoreT.length >= 1) {
 			for (let i = 0; i < this.config["boards"]; i++) {
 				this.scoreT[i].destroy();

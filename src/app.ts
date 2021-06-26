@@ -17,14 +17,13 @@ export default class HelloWorld {
 	private down: MRE.Actor = null;
 	private reset: MRE.Actor = null;
 	private assets: MRE.AssetContainer;
-	private shiftConf: number;
 	private shift: number;
 	private shiftT: number;
-	private boards: number;
 	private Score: number[];
+	private config: { [key: string]: number };
 
 
-	constructor(private context: MRE.Context) {
+	constructor(private context: MRE.Context, private params: MRE.ParameterSet) {
 		this.context.onStarted(() => this.started());
 	}
 
@@ -33,22 +32,27 @@ export default class HelloWorld {
 	 */
 	private started() {
 		// config for board positioning and amount of boards
-		this.shiftConf = -1.1;
 		this.shift = -.5;
 		this.shiftT = -.5;
-		this.boards = 4;
 
 		// initialize score
-		this.Score = new Array(this.boards);
-		for (let i = 0; i < this.boards; i++) {
+		this.Score = new Array(this.config["boards"]);
+		for (let i = 0; i < this.config["boards"]; i++) {
 			this.Score[i] = 0;
 		}
 
 		// set up somewhere to store loaded assets (meshes, textures, animations, gltfs, etc.)
 		this.assets = new MRE.AssetContainer(this.context);
+		const allowed = ["boards", "spread"]
+		this.config = { "boards": 4, "spread": -1.1 };
+		for (const key in this.params) {
+
+			this.config[key] = Number(this.params[key]);
+			
+		}
 
 		this.menu = MRE.Actor.Create(this.context, {});
-		this.scoreT = new Array(this.boards)
+		this.scoreT = new Array(this.config["boards"])
 		this.create_score();
 		this.show_score();
 
@@ -60,7 +64,7 @@ export default class HelloWorld {
 		const upmodel = await this.assets.loadGltf('UpButton.glb', "box");
 		const downmodel = await this.assets.loadGltf('DownButton.glb', "box");
 		const resetmodel = await this.assets.loadGltf('RedButton.glb', "box");
-		for (let i = 0; i < this.boards; i++) {
+		for (let i = 0; i < this.config["boards"]; i++) {
 			// spawn a copy of the glTF model
 			this.tv = MRE.Actor.CreateFromPrefab(this.context, {
 				// using the data we loaded earlier
@@ -153,12 +157,12 @@ export default class HelloWorld {
 				this.show_score();
 			});
 
-			this.shift += this.shiftConf;
+			this.shift += this.config["boards"];
 		}
 	}
 	private show_score() {
 		let temp = this.shiftT;
-		for (let i = 0; i < this.boards; i++) {
+		for (let i = 0; i < this.config["boards"]; i++) {
 			this.scoreT[i] = (MRE.Actor.Create(this.context, {
 				actor: {
 					name: 'score',
@@ -176,7 +180,7 @@ export default class HelloWorld {
 					}
 				}
 			}));
-			this.shiftT += this.shiftConf;
+			this.shiftT += this.config["boards"];
 		}
 		this.shiftT = temp;
 	}
@@ -184,7 +188,7 @@ export default class HelloWorld {
 	// (delete this.scoreT[i]);
 	private destroy_score() {	
 		if (this.scoreT.length >= 1) {
-			for (let i = 0; i < this.boards; i++) {
+			for (let i = 0; i < this.config["boards"]; i++) {
 				this.scoreT[i].destroy();
 				delete this.scoreT[i];
 			}

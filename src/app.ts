@@ -48,8 +48,10 @@ export default class HelloWorld {
 		}
 		// initialize score
 		this.Score = new Array(this.config["boards"]);
-		this.Score = [0, 0, 0, 0];
-		console.log(this.params); 2
+		for (let i = 0; i < this.config["boards"]; i++) {
+			this.Score[i]=0;
+		}
+		console.log(this.params);
 		this.menu = MRE.Actor.Create(this.context, {});
 		this.scoreT = new Array(this.config["boards"]);
 

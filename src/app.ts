@@ -48,10 +48,8 @@ export default class HelloWorld {
 		}
 		// initialize score
 		this.Score = new Array(this.config["boards"]);
-		for (let i = 0; i < this.config["boards"]; i++) {
-			this.Score[i]=0;
-		}
-		console.log(this.params);
+		this.Score = [0, 0, 0, 0];
+		console.log(this.params); 2
 		this.menu = MRE.Actor.Create(this.context, {});
 		this.scoreT = new Array(this.config["boards"]);
 
@@ -74,9 +72,9 @@ export default class HelloWorld {
 			// spawn a copy of the glTF model
 			console.log("tv");
 
-			this.tv = MRE.Actor.CreateFromPrefab(this.context, {
+			this.tv = MRE.Actor.CreateFromLibrary(this.context, {
 				// using the data we loaded earlier
-				firstPrefabFrom: tvmodel,
+				resourceId:"artifact:1956000502483255462",
 				// Also apply the following generic actor properties.
 				actor: {
 					name: 'Tv Model',
@@ -91,9 +89,9 @@ export default class HelloWorld {
 				}
 			});
 
-			this.up = MRE.Actor.CreateFromPrefab(this.context, {
+			this.up = MRE.Actor.CreateFromLibrary(this.context, {
 				// using the data we loaded earlier
-				firstPrefabFrom: upmodel,
+				resourceId:"artifact:1956000515594649770",
 				// Also apply the following generic actor properties.
 				actor: {
 					name: 'up button',
@@ -114,9 +112,9 @@ export default class HelloWorld {
 				this.show_score();
 			});
 
-			this.down = MRE.Actor.CreateFromPrefab(this.context, {
+			this.down = MRE.Actor.CreateFromLibrary(this.context, {
 				// using the data we loaded earlier
-				firstPrefabFrom: downmodel,
+				resourceId:"artifact:1956000474826014874",
 				// Also apply the following generic actor properties.
 				actor: {
 					name: 'down button',
@@ -142,9 +140,9 @@ export default class HelloWorld {
 				this.show_score();
 			});
 
-			this.reset = MRE.Actor.CreateFromPrefab(this.context, {
+			this.reset = MRE.Actor.CreateFromLibrary(this.context, {
 				// using the data we loaded earlier
-				firstPrefabFrom: resetmodel,
+				resourceId:"artifact:1956000488717549727",
 				// Also apply the following generic actor properties.
 				actor: {
 					name: 'reset button',
